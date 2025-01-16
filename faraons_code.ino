@@ -15,8 +15,8 @@ int  bluePin = 9;
 int L = 0;
 
 // stepper
-Stepper stepper(STEPS, 10, 11, 12, 13);
-int previous = 0;
+Stepper stepper(SREG_S, 10, 11, 12, 13);
+const int stepsPerRevolution = 512;
 
 //lcd
 
@@ -41,7 +41,7 @@ void setup() { //---------------------------------------------------------
   pinMode(bluePin, OUTPUT);
 
   //stepper
-  stepper.setSpeed(30);
+  stepper.setSpeed(2048);
 
   //lcd
 
@@ -58,6 +58,8 @@ void loop() {  //---------------------------------------------------------
 
   delay(100);
 }
+
+// * combine rbg_light and spin()
 
 void rgb_light(){
   for(int i = 0; i < 255; i++){
@@ -82,10 +84,8 @@ void rgb_light(){
 
 void spin(){
   Serial.println("clockwise");
-  myStepper.step(stepsPerRevolution);
-  delay(500);
+  stepper.step(stepsPerRevolution);
 
   Serial.println("counterclockwise");
-  myStepper.step(-stepsPerRevolution);
-  delay(500)
+  stepper.step(-stepsPerRevolution);
 }
