@@ -1,5 +1,6 @@
 #include <Arduino.h>
 #include <Stepper.h>
+#include <LiquidCrystal_I2C.h>
 
 
 //hall sensor
@@ -19,7 +20,7 @@ Stepper stepper(4, 10, 12, 11, 13); //10-13
 const int stepsPerRevolution = 512;
 
 //lcd
-
+LiquidCrystal_I2C lcd(0x27, 16, 2);
 
 //variables
 int turn_on;
@@ -44,15 +45,24 @@ void setup() { //---------------------------------------------------------
   stepper.setSpeed(2048);
 
   //lcd
-
+  lcd.init();
+  lcd.backlight();
+  lcd.setCursor(0, 2);
+  lcd.print("Sveicinati");
 }
 
 void loop() {  //---------------------------------------------------------
 
+
   amnt = analogRead(hallSensorPin);
-    Serial.println(amnt);
+  //  Serial.println(amnt);
+
   if(amnt > 800){
+    lcd.noBacklight();
     spin();
+  }
+  else if(amnt < 400){
+    lcd.noBacklight();
     rgb_light();
   }
 
@@ -62,6 +72,7 @@ void loop() {  //---------------------------------------------------------
 // * combine rbg_light and spin()
 
 void rgb_light(){
+
   for(int i = 0; i < 255; i++){
       L = 255-i;
       analogWrite(greenPin, i);
@@ -83,10 +94,7 @@ void rgb_light(){
 }
 
 void spin(){
-  Serial.println("clockwise");
   stepper.step(1000);
 
-  Serial.println(SREG_S);
   stepper.step(-1000);
-
 }
