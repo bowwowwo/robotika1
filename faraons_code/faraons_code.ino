@@ -2,6 +2,7 @@
 #include <Stepper.h>
 #include <LiquidCrystal_I2C.h>
 
+// A0, 5, 6, 9, 10, 11, 12, 13, a4, a5
 
 //hall sensor
 int hallSensorPin = A0;
@@ -17,7 +18,6 @@ int L = 0;
 
 // stepper
 Stepper stepper(4, 10, 12, 11, 13); //10-13
-const int stepsPerRevolution = 512;
 
 //lcd
 LiquidCrystal_I2C lcd(0x27, 16, 2);
@@ -47,7 +47,7 @@ void setup() { //---------------------------------------------------------
   //lcd
   lcd.init();
   lcd.backlight();
-  lcd.setCursor(0, 2);
+  lcd.setCursor(2, 0);
   lcd.print("Sveicinati");
 }
 
@@ -57,7 +57,7 @@ void loop() {  //---------------------------------------------------------
   amnt = analogRead(hallSensorPin);
   //  Serial.println(amnt);
 
-  if(amnt > 800){
+  if(amnt > 700){
     lcd.noBacklight();
     spin();
   }
